@@ -1,43 +1,149 @@
-# 🔧 Semyon's Dotfiles
+# semyon's dotfiles
 
-Hey there! 👋 Welcome to my personal configuration files (dotfiles). This is where I keep my Linux setup tidy, organized, and ready to roll.
+hey there! welcome to my personal configuration files. this is where i keep my linux setup tidy, organized, and ready to roll.
 
-## 📂 What's Inside?
+## what's inside
 
-*   **Shell:** Bash (with custom aliases, functions, and history handling)
-*   **Terminal:** Configurations for WezTerm, Ghostty, and Kitty
-*   **Editor:** Neovim setup (using lazy.nvim)
-*   **System Tools:** git, tmux, htop, btop, neofetch
-*   **Prompt:** Starship 🚀
+*   **shell** - bash with custom aliases, functions, and history handling
+*   **terminal** - configurations for wezterm & ghostty
+*   **editor** - neovim setup using lazy.nvim
+*   **system tools** - git, tmux, htop, btop, neofetch
+*   **prompt** - starship
 
-## 🚀 Getting Started
+## getting started
 
-Setting this up on a new machine is super easy.
+### automatic setup (recommended)
+```bash
+git clone https://github.com/semyonfox/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+./setup.sh
+```
 
-1.  **Clone the repo:**
+the setup script will:
+- detect your OS (arch, ubuntu, fedora, macos, etc.)
+- install stow using the right package manager
+- backup any existing dotfiles that would conflict (including .config items)
+- deploy all configs with stow
+- verify everything is working
+- rollback automatically if anything fails
+
+**dry-run mode:**
+```bash
+./setup.sh --dry-run  # or -n
+```
+test the installation without making any changes
+
+### quick manual install
+```bash
+git clone https://github.com/semyonfox/dotfiles.git ~/dotfiles && cd ~/dotfiles && stow home
+```
+make sure stow is installed first!
+
+### detailed setup
+
+setting this up on a new machine is super easy:
+
+1.  **install stow**
     ```bash
-    git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
+    # arch/endeavouros
+    sudo pacman -S stow
+
+    # ubuntu/debian
+    sudo apt install stow
+
+    # fedora
+    sudo dnf install stow
+
+    # macos
+    brew install stow
+    ```
+
+2.  **clone the repo**
+    ```bash
+    git clone https://github.com/semyonfox/dotfiles.git ~/dotfiles
     cd ~/dotfiles
     ```
 
-2.  **Run the installer:**
+3.  **deploy with stow**
     ```bash
-    ./install.sh
+    stow home
     ```
 
-The script will automatically:
-*   **Discover** all configuration files in the repo.
-*   **Back up** your existing configs to a timestamped folder (safety first! 🛡️).
-*   **Symlink** the new ones into place.
+    that's it! stow will symlink everything from the `home/` package to your `$HOME` directory.
 
-## 🛠️ Structure & Usage
+4.  **verify installation** (optional)
+    ```bash
+    # check if symlinks were created
+    ls -la ~ | grep "dotfiles"
 
-*   **Root files:** Files in the root directory (e.g., `bashrc`, `gitconfig`) are symlinked to `~/.<filename>` (e.g., `~/.bashrc`).
-*   **Config folder:** Items in `config/` are symlinked to `~/.config/<itemname>`.
+    # test bashrc loads without errors
+    bash -c "source ~/.bashrc && echo 'success'"
+    ```
 
-### Adding new files
-Just drop a file in the root or `config/` directory and run `./install.sh` again. It's idempotent, so it will only link what's missing!
+### what gets installed
 
-## 📜 License
+stow will create symlinks for:
+- shell configs: `.bashrc`, `.bash_aliases`, `.bash_functions`, `.bash_profile`, `.profile`
+- terminal: `.wezterm.lua`
+- git: `.gitconfig`
+- tmux: `.tmux.conf`
+- apps: `.config/btop`, `.config/ghostty`, `.config/htop`, `.config/kitty`, `.config/neofetch`, `.config/starship.toml`
 
-MIT. Feel free to fork this, steal code, or learn from my messy experiments. Happy hacking! 💻
+## structure and usage
+
+this repo uses [GNU Stow](https://www.gnu.org/software/stow/) for symlink management:
+
+*   **home/** - package containing all dotfiles (`.bashrc`, `.config/nvim`, etc.)
+*   when you run `stow home`, it creates symlinks in `~` that point to files in `home/`
+*   **example**: `home/.bashrc` → `~/.bashrc`
+
+## managing dotfiles
+
+**add new configs**: place them in `home/` (or `home/.config/` for XDG configs), then run `stow home`
+
+**update existing**: just edit files in the repo, changes are instant (they're symlinked!)
+
+**remove symlinks**: `stow -D home` (deletes all symlinks created by stow)
+
+**re-stow**: if symlinks get broken, run `stow -R home` to recreate them
+
+## troubleshooting
+
+**conflict errors when stowing?**
+```bash
+# backup existing configs first
+mkdir -p ~/backup
+mv ~/.bashrc ~/.gitconfig ~/.tmux.conf ~/backup/
+
+# then try stowing again
+stow home
+```
+
+**check if symlinks are working:**
+```bash
+# verify all symlinks are valid
+for file in .bashrc .gitconfig .tmux.conf .wezterm.lua; do
+  if [ -L ~/"$file" ]; then
+    echo "$file: symlinked to $(readlink ~/$file)"
+  else
+    echo "$file: not a symlink"
+  fi
+done
+```
+
+**restore original configs:**
+```bash
+cd ~/dotfiles
+stow -D home  # remove all symlinks
+cp ~/backup/* ~/  # restore from backup
+```
+
+## license
+
+mit - feel free to fork this, steal code, or learn from my messy experiments.
+
+## acknowledgements
+
+big thanks to these folks for some great inspiration:
+*   [omerxx](https://github.com/omerxx/dotfiles) for dotfiles inspiration
+*   [axenide](https://github.com/starship/starship/discussions/1107#discussioncomment-13953875) for starship config ideas

@@ -178,3 +178,6 @@ _welcome_bar
 # ======================================================================
 # Source local bashrc if it exists (for machine-specific configs)
 [[ -f ~/.bashrc.local ]] && source ~/.bashrc.local
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
