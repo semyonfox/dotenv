@@ -119,7 +119,7 @@ backup_existing() {
     local files_to_backup=()
 
     # Check for conflicting files in home directory
-    local dotfiles=(.bashrc .bash_aliases .bash_functions .bash_profile .profile .gitconfig .tmux.conf .wezterm.lua)
+    local dotfiles=(.bashrc .bash_aliases .bash_functions .bash_profile .zshrc .zsh_aliases .zsh_functions .zprofile .profile .gitconfig .tmux.conf .wezterm.lua)
 
     for file in "${dotfiles[@]}"; do
         if [[ -f "$HOME/$file" && ! -L "$HOME/$file" ]]; then
@@ -200,7 +200,7 @@ verify_installation() {
     local verified=0
     local failed=0
 
-    local dotfiles=(.bashrc .bash_aliases .bash_functions .bash_profile .profile .gitconfig .tmux.conf .wezterm.lua)
+    local dotfiles=(.bashrc .bash_aliases .bash_functions .bash_profile .zshrc .zsh_aliases .zsh_functions .zprofile .profile .gitconfig .tmux.conf .wezterm.lua)
 
     for file in "${dotfiles[@]}"; do
         if [[ -L "$HOME/$file" ]]; then
@@ -222,6 +222,15 @@ verify_installation() {
         success ".bashrc loads without errors"
     else
         warn ".bashrc has errors (this might be expected if dependencies are missing)"
+    fi
+
+    # Test zshrc if zsh is installed
+    if command -v zsh &> /dev/null && [[ -f "$HOME/.zshrc" ]]; then
+        if zsh -c "source ~/.zshrc" &> /dev/null; then
+            success ".zshrc loads without errors"
+        else
+            warn ".zshrc has errors (this might be expected if dependencies are missing)"
+        fi
     fi
 }
 
