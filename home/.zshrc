@@ -12,7 +12,7 @@ ZSH_THEME=""
 # Oh My Zsh settings
 zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 13
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"  # Disabled - too aggressive with directory names
 COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
@@ -63,7 +63,7 @@ setopt AUTO_CD              # Auto cd when typing directory name
 setopt AUTO_PUSHD           # Push old directory onto stack on cd
 setopt PUSHD_IGNORE_DUPS    # Don't push multiple copies
 setopt PUSHD_SILENT         # Don't print directory stack
-setopt CORRECT              # Spelling correction for commands
+# setopt CORRECT            # Spelling correction - disabled, too aggressive
 setopt EXTENDED_GLOB        # Extended globbing features
 setopt NO_BEEP              # Disable beep on error
 setopt INTERACTIVE_COMMENTS # Allow comments in interactive shell
