@@ -4,7 +4,7 @@ hey there! welcome to my personal configuration files. this is where i keep my l
 
 ## what's inside
 
-*   **shell** - bash with custom aliases, functions, and history handling
+*   **shell** - bash & zsh with custom aliases, functions, and history handling
 *   **terminal** - configurations for wezterm & ghostty
 *   **editor** - neovim setup using lazy.nvim
 *   **system tools** - git, tmux, htop, btop, neofetch
@@ -83,7 +83,8 @@ setting this up on a new machine is super easy:
 ### what gets installed
 
 stow will create symlinks for:
-- shell configs: `.bashrc`, `.bash_aliases`, `.bash_functions`, `.bash_profile`, `.profile`
+- shell configs (bash): `.bashrc`, `.bash_aliases`, `.bash_functions`, `.bash_profile`, `.profile`
+- shell configs (zsh): `.zshrc`, `.zsh_aliases`, `.zsh_functions`, `.zprofile`
 - terminal: `.wezterm.lua`
 - git: `.gitconfig`
 - tmux: `.tmux.conf`
@@ -96,6 +97,28 @@ this repo uses [GNU Stow](https://www.gnu.org/software/stow/) for symlink manage
 *   **home/** - package containing all dotfiles (`.bashrc`, `.config/nvim`, etc.)
 *   when you run `stow home`, it creates symlinks in `~` that point to files in `home/`
 *   **example**: `home/.bashrc` → `~/.bashrc`
+
+## switching to zsh
+
+want to use zsh instead of bash? we've got you covered:
+
+1. **install zsh**
+   ```bash
+   sudo pacman -S zsh zsh-completions
+   ```
+
+2. **switch your default shell**
+   ```bash
+   ./switch-to-zsh.sh
+   ```
+   or manually:
+   ```bash
+   chsh -s $(which zsh)
+   ```
+
+3. **log out and log back in** for the changes to take effect
+
+the zsh configs mirror all the bash functionality with zsh-specific improvements like better completion and shared history across sessions.
 
 ## managing dotfiles
 
