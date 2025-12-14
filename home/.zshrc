@@ -39,8 +39,8 @@ source $ZSH/oh-my-zsh.sh
 # ENVIRONMENT VARIABLES
 # ======================================================================
 export PATH="$HOME/.local/bin:$PATH"
-export EDITOR='vim'
-export VISUAL='vim'
+export EDITOR='nvim'
+export VISUAL='nvim'
 
 # ======================================================================
 # HISTORY CONFIGURATION
